@@ -124,11 +124,22 @@ export default function App() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: 'var(--glow-shadow)'
+            boxShadow: '0 0 10px rgba(59, 130, 246, 0.4), 0 0 3px rgba(249, 115, 22, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.2)'
           }}>
             <Wallet size={16} color="white" />
           </div>
-          <span style={{ fontSize: '1rem', fontWeight: 800, letterSpacing: '-0.02em' }}>FinFlow</span>
+          <span style={{ 
+            fontSize: '1.05rem', 
+            fontWeight: 800, 
+            letterSpacing: '-0.02em',
+            background: 'var(--primary-gradient)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            filter: 'drop-shadow(0px 0px 6px rgba(59, 130, 246, 0.2))'
+          }}>
+            FinFlow
+          </span>
         </div>
         <button 
           className="btn" 

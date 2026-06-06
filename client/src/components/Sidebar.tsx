@@ -29,15 +29,25 @@ export default function Sidebar({ activeTab, setActiveTab, isOffline, isOpen, on
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: 'var(--glow-shadow)'
+                boxShadow: '0 0 15px rgba(59, 130, 246, 0.4), 0 0 5px rgba(249, 115, 22, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.25)'
               }}>
                 <Wallet size={20} color="white" />
               </div>
               <div>
-                <h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
+                <h2 style={{ 
+                  margin: 0, 
+                  fontSize: '1.25rem', 
+                  fontWeight: 800, 
+                  letterSpacing: '-0.02em',
+                  background: 'var(--primary-gradient)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  filter: 'drop-shadow(0px 0px 8px rgba(59, 130, 246, 0.2))'
+                }}>
                   FinFlow
                 </h2>
-                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 700, letterSpacing: '0.05em' }}>
                   EXPENSE TRACKER
                 </span>
               </div>

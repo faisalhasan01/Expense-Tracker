@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Edit, Plus } from 'lucide-react';
+import { X, Edit, Plus, AlertCircle } from 'lucide-react';
 import type { Category, Expense } from '../types';
 
 interface ExpenseFormProps {
@@ -130,10 +130,14 @@ export default function ExpenseForm({ isOpen, onClose, onSubmit, editingExpense 
               onChange={(e) => setAmount(e.target.value)}
               placeholder="e.g. 350.00"
               className={`form-input ${errors.amount ? 'invalid' : ''}`}
-              style={errors.amount ? { borderColor: 'var(--danger)' } : {}}
               disabled={submitting}
             />
-            {errors.amount && <span className="form-error">{errors.amount}</span>}
+            {errors.amount && (
+              <span className="form-error">
+                <AlertCircle size={14} />
+                <span>{errors.amount}</span>
+              </span>
+            )}
           </div>
 
           {/* Category field */}
@@ -143,7 +147,6 @@ export default function ExpenseForm({ isOpen, onClose, onSubmit, editingExpense 
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
               className={`form-input ${errors.category ? 'invalid' : ''}`}
-              style={errors.category ? { borderColor: 'var(--danger)' } : {}}
               disabled={submitting}
             >
               <option value="" disabled>Select a category</option>
@@ -151,7 +154,12 @@ export default function ExpenseForm({ isOpen, onClose, onSubmit, editingExpense 
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
-            {errors.category && <span className="form-error">{errors.category}</span>}
+            {errors.category && (
+              <span className="form-error">
+                <AlertCircle size={14} />
+                <span>{errors.category}</span>
+              </span>
+            )}
           </div>
 
           {/* Date field */}
@@ -163,10 +171,14 @@ export default function ExpenseForm({ isOpen, onClose, onSubmit, editingExpense 
               value={date}
               onChange={(e) => setDate(e.target.value)}
               className={`form-input ${errors.date ? 'invalid' : ''}`}
-              style={errors.date ? { borderColor: 'var(--danger)' } : {}}
               disabled={submitting}
             />
-            {errors.date && <span className="form-error">{errors.date}</span>}
+            {errors.date && (
+              <span className="form-error">
+                <AlertCircle size={14} />
+                <span>{errors.date}</span>
+              </span>
+            )}
           </div>
 
           {/* Note field */}
@@ -179,12 +191,16 @@ export default function ExpenseForm({ isOpen, onClose, onSubmit, editingExpense 
               className={`form-input ${errors.note ? 'invalid' : ''}`}
               style={{
                 resize: 'vertical',
-                minHeight: '80px',
-                borderColor: errors.note ? 'var(--danger)' : undefined
+                minHeight: '80px'
               }}
               disabled={submitting}
             />
-            {errors.note && <span className="form-error">{errors.note}</span>}
+            {errors.note && (
+              <span className="form-error">
+                <AlertCircle size={14} />
+                <span>{errors.note}</span>
+              </span>
+            )}
           </div>
 
           {/* Actions */}

@@ -18,19 +18,22 @@ export default function SummaryCards({ totalSpentThisMonth, highestExpense, budg
 
   // Progress bar styling
   let progressBarColor = 'var(--success)';
+  let glowClass = 'card-glow-success';
   if (budgetPercentage >= 100) {
     progressBarColor = 'var(--danger)';
+    glowClass = 'card-glow-danger';
   } else if (budgetPercentage >= 80) {
     progressBarColor = 'var(--warning)';
+    glowClass = 'card-glow-orange';
   }
 
   return (
     <div className="dashboard-grid">
       {/* Total Spent Card */}
-      <div className="glass-card glass-card-interactive" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+      <div className="glass-card glass-card-interactive card-glow-blue" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
         <div style={{
-          background: 'linear-gradient(135deg, var(--primary-light) 0%, rgba(99, 102, 241, 0.05) 100%)',
-          border: '1px solid rgba(99, 102, 241, 0.2)',
+          background: 'linear-gradient(135deg, var(--primary-light) 0%, rgba(59, 130, 246, 0.05) 100%)',
+          border: '1px solid rgba(59, 130, 246, 0.2)',
           borderRadius: '12px',
           width: '56px',
           height: '56px',
@@ -51,10 +54,10 @@ export default function SummaryCards({ totalSpentThisMonth, highestExpense, budg
       </div>
 
       {/* Highest Expense Card */}
-      <div className="glass-card glass-card-interactive" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+      <div className="glass-card glass-card-interactive card-glow-orange" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
         <div style={{
-          background: 'linear-gradient(135deg, var(--warning-light) 0%, rgba(251, 146, 60, 0.05) 100%)',
-          border: '1px solid rgba(251, 146, 60, 0.2)',
+          background: 'linear-gradient(135deg, var(--warning-light) 0%, rgba(249, 115, 22, 0.05) 100%)',
+          border: '1px solid rgba(249, 115, 22, 0.2)',
           borderRadius: '12px',
           width: '56px',
           height: '56px',
@@ -75,7 +78,7 @@ export default function SummaryCards({ totalSpentThisMonth, highestExpense, budg
       </div>
 
       {/* Budget Limit Card */}
-      <div className="glass-card glass-card-interactive" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', justifyContent: 'center' }}>
+      <div className={`glass-card glass-card-interactive ${glowClass}`} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', justifyContent: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
             Overall Budget Usage

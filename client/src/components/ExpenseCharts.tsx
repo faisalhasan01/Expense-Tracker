@@ -21,11 +21,11 @@ interface ExpenseChartsProps {
 }
 
 const CATEGORY_COLORS: Record<Category, string> = {
-  Food: '#fb923c',        // Orange/Amber
-  Transport: '#38bdf8',   // Sky Blue
+  Food: '#f97316',        // Orange
+  Transport: '#3b82f6',   // Blue
   Bills: '#f43f5e',       // Rose
-  Entertainment: '#a855f7', // Purple
-  Other: '#9ca3af'        // Gray
+  Entertainment: '#eab308', // Yellow
+  Other: '#64748b'        // Slate
 };
 
 export default function ExpenseCharts({ categoryTotals, expenses }: ExpenseChartsProps) {
@@ -116,9 +116,20 @@ export default function ExpenseCharts({ categoryTotals, expenses }: ExpenseChart
         <h2 style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
           Daily Spending Trend (Last 8 Days)
         </h2>
-        <div style={{ flex: 1, width: '100%', minHeight: '260px' }}>
-          <ResponsiveContainer width="100%" height="100%">
+        <div style={{ flex: 1, width: '100%', height: '260px' }}>
+          <ResponsiveContainer width="100%" height={260}>
             <BarChart data={barData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+              <defs>
+                <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#eab308" stopOpacity={0.95}/>
+                  <stop offset="50%" stopColor="#f97316" stopOpacity={0.85}/>
+                  <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.4}/>
+                </linearGradient>
+                <linearGradient id="barEmptyGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="rgba(255,255,255,0.06)" stopOpacity={0.15}/>
+                  <stop offset="100%" stopColor="rgba(255,255,255,0.01)" stopOpacity={0.02}/>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.04)" />
               <XAxis
                 dataKey="date"
@@ -137,14 +148,16 @@ export default function ExpenseCharts({ categoryTotals, expenses }: ExpenseChart
               <Tooltip content={renderBarTooltip} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
               <Bar
                 dataKey="amount"
-                fill="var(--primary)"
-                radius={[4, 4, 0, 0]}
-                maxBarSize={32}
+                fill="url(#barGradient)"
+                radius={[6, 6, 0, 0]}
+                maxBarSize={28}
               >
                 {barData.map((entry, idx) => (
                   <Cell
                     key={`cell-${idx}`}
-                    fill={entry.amount > 0 ? 'var(--primary)' : 'rgba(255,255,255,0.05)'}
+                    fill={entry.amount > 0 ? 'url(#barGradient)' : 'url(#barEmptyGradient)'}
+                    stroke={entry.amount > 0 ? '#a855f7' : 'rgba(255,255,255,0.05)'}
+                    strokeWidth={entry.amount > 0 ? 0.5 : 0}
                   />
                 ))}
               </Bar>
@@ -158,15 +171,15 @@ export default function ExpenseCharts({ categoryTotals, expenses }: ExpenseChart
         <h2 style={{ fontSize: '1.05rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
           Category Distribution (This Month)
         </h2>
-        <div style={{ flex: 1, position: 'relative', width: '100%', minHeight: '260px' }}>
-          <ResponsiveContainer width="100%" height="100%">
+        <div style={{ flex: 1, position: 'relative', width: '100%', height: '260px' }}>
+          <ResponsiveContainer width="100%" height={260}>
             <PieChart>
               <Pie
                 data={pieData}
                 cx="50%"
                 cy="45%"
-                innerRadius={65}
-                outerRadius={85}
+                innerRadius={62}
+                outerRadius={82}
                 paddingAngle={4}
                 dataKey="value"
               >
@@ -181,7 +194,7 @@ export default function ExpenseCharts({ categoryTotals, expenses }: ExpenseChart
               <Tooltip content={renderPieTooltip} />
               <Legend
                 verticalAlign="bottom"
-                iconSize={10}
+                iconSize={8}
                 iconType="circle"
                 wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }}
               />
@@ -196,7 +209,7 @@ export default function ExpenseCharts({ categoryTotals, expenses }: ExpenseChart
               textAlign: 'center',
               pointerEvents: 'none'
             }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>No Spending</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>No Spending</p>
             </div>
           )}
         </div>

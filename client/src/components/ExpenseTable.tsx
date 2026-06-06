@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Edit2, Trash2, Download, Search, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
+import { Edit2, Trash2, Download, Search, ChevronLeft, ChevronRight, Filter, Utensils, Car, FileText, Film, Tag } from 'lucide-react';
 import type { Expense, FilterState, Category, DateFilterType } from '../types';
 import { formatCurrency, formatDate } from '../utils/formatters';
 
@@ -66,6 +66,16 @@ export default function ExpenseTable({ expenses, filters, setFilters, onEdit, on
     }
   };
 
+  const getCategoryIcon = (category: Category) => {
+    switch (category) {
+      case 'Food': return <Utensils size={12} style={{ marginRight: '6px' }} />;
+      case 'Transport': return <Car size={12} style={{ marginRight: '6px' }} />;
+      case 'Bills': return <FileText size={12} style={{ marginRight: '6px' }} />;
+      case 'Entertainment': return <Film size={12} style={{ marginRight: '6px' }} />;
+      default: return <Tag size={12} style={{ marginRight: '6px' }} />;
+    }
+  };
+
   return (
     <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       {/* Filtering & Export Controls */}
@@ -120,7 +130,7 @@ export default function ExpenseTable({ expenses, filters, setFilters, onEdit, on
               <input
                 type="date"
                 className="form-input"
-                style={{ width: '140px', padding: '0.5rem 0.75rem', fontSize: '0.85rem' }}
+                style={{ width: '160px' }}
                 value={filters.startDate || ''}
                 onChange={(e) => setFilters(prev => ({ ...prev, startDate: e.target.value }))}
                 placeholder="Start Date"
@@ -129,7 +139,7 @@ export default function ExpenseTable({ expenses, filters, setFilters, onEdit, on
               <input
                 type="date"
                 className="form-input"
-                style={{ width: '140px', padding: '0.5rem 0.75rem', fontSize: '0.85rem' }}
+                style={{ width: '160px' }}
                 value={filters.endDate || ''}
                 onChange={(e) => setFilters(prev => ({ ...prev, endDate: e.target.value }))}
                 placeholder="End Date"
@@ -172,8 +182,9 @@ export default function ExpenseTable({ expenses, filters, setFilters, onEdit, on
                     {formatDate(expense.date)}
                   </td>
                   <td>
-                    <span className={`badge ${getBadgeClass(expense.category)}`}>
-                      {expense.category}
+                    <span className={`badge ${getBadgeClass(expense.category)}`} style={{ display: 'inline-flex', alignItems: 'center' }}>
+                      {getCategoryIcon(expense.category)}
+                      <span>{expense.category}</span>
                     </span>
                   </td>
                   <td style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: expense.note ? 'var(--text-primary)' : 'var(--text-muted)' }}>

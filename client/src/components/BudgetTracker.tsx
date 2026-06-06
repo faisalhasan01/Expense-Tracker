@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShieldAlert, Save, Edit2, AlertCircle } from 'lucide-react';
+import { ShieldAlert, Save, Edit2, AlertCircle, Utensils, Car, FileText, Film, Tag } from 'lucide-react';
 import type { Category, Budgets } from '../types';
 import { formatCurrency } from '../utils/formatters';
 
@@ -27,6 +27,16 @@ export default function BudgetTracker({ budgets, categoryTotals, onUpdateBudget 
     const success = await onUpdateBudget(category, amount);
     if (success) {
       setEditingCategory(null);
+    }
+  };
+
+  const getCategoryIcon = (category: Category) => {
+    switch (category) {
+      case 'Food': return <Utensils size={16} style={{ marginRight: '6px' }} />;
+      case 'Transport': return <Car size={16} style={{ marginRight: '6px' }} />;
+      case 'Bills': return <FileText size={16} style={{ marginRight: '6px' }} />;
+      case 'Entertainment': return <Film size={16} style={{ marginRight: '6px' }} />;
+      default: return <Tag size={16} style={{ marginRight: '6px' }} />;
     }
   };
 
@@ -71,8 +81,9 @@ export default function BudgetTracker({ budgets, categoryTotals, onUpdateBudget 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
                 {/* Category label & status badge */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
-                    {category}
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', margin: 0, display: 'flex', alignItems: 'center' }}>
+                    {getCategoryIcon(category)}
+                    <span>{category}</span>
                   </h3>
                   {isExceeded && (
                     <span style={{

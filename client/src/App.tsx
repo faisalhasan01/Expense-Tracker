@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { Plus, AlertOctagon } from 'lucide-react';
+import { Plus, AlertOctagon, Menu, Wallet, Utensils, Car, FileText, Film, Tag, Calendar, ArrowRight } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import SummaryCards from './components/SummaryCards';
 import ExpenseForm from './components/ExpenseForm';
@@ -9,13 +9,14 @@ import BudgetTracker from './components/BudgetTracker';
 import Toast from './components/Toast';
 import { useExpenses } from './hooks/useExpenses';
 import type { Expense, ToastMessage, Category } from './types';
-import { formatCurrency } from './utils/formatters';
+import { formatCurrency, formatDate } from './utils/formatters';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'expenses' | 'budgets'>('dashboard');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Function to show toast alert
   const showToast = useCallback((message: string, type: ToastMessage['type']) => {
@@ -103,11 +104,49 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* Background Ambient Glow Accents */}
+      <div className="glow-bg-container">
+        <div className="glow-accent-1"></div>
+        <div className="glow-accent-2"></div>
+      </div>
+
       {/* Toast notifications portal */}
       <Toast toasts={toasts} onClose={removeToast} />
 
-      {/* Persistent left Sidebar */}
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isOffline={isOffline} />
+      {/* Mobile top navbar header */}
+      <header className="mobile-nav-header">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{
+            background: 'var(--primary-gradient)',
+            width: '32px',
+            height: '32px',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: 'var(--glow-shadow)'
+          }}>
+            <Wallet size={16} color="white" />
+          </div>
+          <span style={{ fontSize: '1rem', fontWeight: 800, letterSpacing: '-0.02em' }}>FinFlow</span>
+        </div>
+        <button 
+          className="btn" 
+          onClick={() => setIsSidebarOpen(true)}
+          style={{ padding: '0.4rem', border: 'none', background: 'transparent' }}
+        >
+          <Menu size={22} color="var(--text-primary)" />
+        </button>
+      </header>
+
+      {/* Responsive Sidebar */}
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        isOffline={isOffline} 
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
 
       {/* Main viewport */}
       <main className="main-content">
@@ -188,24 +227,123 @@ export default function App() {
             />
 
             {/* Quick overview of latest activity */}
-            <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h2>Recent Spending Log</h2>
+                <h2>Recent Spending Feed</h2>
                 <button
                   className="btn btn-secondary"
                   style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}
                   onClick={() => setActiveTab('expenses')}
                 >
-                  View All Logged Data
+                  View All Logs
                 </button>
               </div>
-              <ExpenseTable
-                expenses={filteredExpenses.slice(0, 5)} // Limit to 5 items on dashboard
-                filters={filters}
-                setFilters={setFilters}
-                onEdit={handleEditClick}
-                onDelete={deleteExpense}
-              />
+
+              {filteredExpenses.length > 0 ? (
+                <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingLeft: '0.5rem', paddingRight: '0.5rem' }}>
+                  {/* Left vertical timeline line */}
+                  <div style={{
+                    position: 'absolute',
+                    left: '21px',
+                    top: '12px',
+                    bottom: '12px',
+                    width: '2px',
+                    background: 'linear-gradient(to bottom, var(--primary) 0%, var(--warning) 50%, var(--accent) 100%)',
+                    opacity: 0.2
+                  }} />
+
+                  {filteredExpenses.slice(0, 5).map((expense) => {
+                    // Pick icon and color for the node based on category
+                    let icon = <Tag size={14} />;
+                    let nodeColor = 'var(--text-muted)';
+
+                    if (expense.category === 'Food') {
+                      icon = <Utensils size={14} />;
+                      nodeColor = 'var(--warning)'; // Orange
+                    } else if (expense.category === 'Transport') {
+                      icon = <Car size={14} />;
+                      nodeColor = 'var(--primary)'; // Blue
+                    } else if (expense.category === 'Bills') {
+                      icon = <FileText size={14} />;
+                      nodeColor = 'var(--danger)'; // Red
+                    } else if (expense.category === 'Entertainment') {
+                      icon = <Film size={14} />;
+                      nodeColor = 'var(--accent)'; // Yellow
+                    }
+
+                    return (
+                      <div key={expense.id} style={{ display: 'flex', gap: '1.25rem', alignItems: 'center', position: 'relative', zIndex: 1 }}>
+                        {/* Timeline circular node containing icon */}
+                        <div style={{
+                          width: '26px',
+                          height: '26px',
+                          borderRadius: '50%',
+                          background: 'var(--bg-secondary)',
+                          border: `2px solid ${nodeColor}`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: nodeColor,
+                          boxShadow: `0 0 10px ${nodeColor}33`,
+                          flexShrink: 0
+                        }}>
+                          {icon}
+                        </div>
+
+                        {/* Timeline content card */}
+                        <div 
+                          className="glass-card glass-card-interactive" 
+                          style={{ 
+                            flex: 1, 
+                            padding: '1rem 1.25rem', 
+                            display: 'flex', 
+                            justifyContent: 'space-between', 
+                            alignItems: 'center',
+                            background: 'rgba(15, 21, 36, 0.45)',
+                            borderLeft: `3px solid ${nodeColor}`,
+                            margin: 0
+                          }}
+                          onClick={() => handleEditClick(expense)}
+                        >
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', overflow: 'hidden' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                              <span style={{ fontWeight: 700, fontSize: '0.95rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {expense.note || `${expense.category} Spend`}
+                              </span>
+                              <span className={`badge badge-${expense.category.toLowerCase()}`} style={{ fontSize: '0.65rem', padding: '0.15rem 0.5rem' }}>
+                                {expense.category}
+                              </span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                              <Calendar size={12} />
+                              <span>{formatDate(expense.date)}</span>
+                            </div>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                            <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--text-primary)' }}>
+                              {formatCurrency(expense.amount)}
+                            </span>
+                            <button 
+                              className="btn"
+                              style={{ padding: '0.35rem', borderRadius: '8px', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                              onClick={(e) => { e.stopPropagation(); deleteExpense(expense.id); }}
+                              title="Delete entry"
+                            >
+                              <ArrowRight size={16} color="var(--text-muted)" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div style={{ padding: '3rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: 'var(--text-muted)' }}>
+                  <Calendar size={36} />
+                  <p>No recent activity. Log a new expense to get started!</p>
+                </div>
+              )}
             </div>
           </>
         )}

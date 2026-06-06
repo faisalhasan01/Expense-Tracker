@@ -108,6 +108,7 @@ export default function App() {
       <div className="glow-bg-container">
         <div className="glow-accent-1"></div>
         <div className="glow-accent-2"></div>
+        <div className="glow-accent-3"></div>
       </div>
 
       {/* Toast notifications portal */}

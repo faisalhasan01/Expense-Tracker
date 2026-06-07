@@ -10,6 +10,7 @@ server/dist/
 
 # Local databases and data
 server/data/db.json
+server/data/database.sqlite
 
 # Environment variables
 .env

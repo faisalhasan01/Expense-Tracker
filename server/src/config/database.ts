@@ -1,6 +1,7 @@
 import sqlite3 from 'sqlite3';
 import path from 'path';
 import fs from 'fs/promises';
+import { existsSync, mkdirSync } from 'fs';
 import { Expense, Budgets, Category } from '../models/types';
 
 const DB_PATH = path.join(__dirname, '../../data/database.sqlite');
@@ -10,6 +11,15 @@ let dbConn: sqlite3.Database;
 function getDbConnection(): Promise<sqlite3.Database> {
   return new Promise((resolve, reject) => {
     if (dbConn) return resolve(dbConn);
+    
+    const dbDir = path.dirname(DB_PATH);
+    if (!existsSync(dbDir)) {
+      try {
+        mkdirSync(dbDir, { recursive: true });
+      } catch (mkdirErr) {
+        return reject(mkdirErr);
+      }
+    }
     
     dbConn = new sqlite3.Database(DB_PATH, (err) => {
       if (err) return reject(err);

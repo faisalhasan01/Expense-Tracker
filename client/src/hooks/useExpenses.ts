@@ -1,7 +1,16 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Expense, Budgets, FilterState, Category } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const getApiBaseUrl = () => {
+  let url = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+  url = url.trim().replace(/\/+$/, '');
+  if (url && !url.toLowerCase().includes('/api')) {
+    url = `${url}/api`;
+  }
+  return url;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 const DEFAULT_BUDGETS: Budgets = {
   Food: 0,
@@ -43,9 +52,9 @@ export function useExpenses(
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      // Check server health first with short timeout
+      // Check server health first with a longer timeout (15s) to allow for backend cold starts
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
       
       const healthRes = await fetch(`${API_BASE_URL}/health`, { signal: controller.signal });
       clearTimeout(timeoutId);
